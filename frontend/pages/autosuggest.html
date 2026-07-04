@@ -1,1 +1,159 @@
-<h1>The autosuggest Page</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Suggest</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center; 
+            align-items: center;     
+            background-color: #f9f9f9; 
+        }
+
+        .top-navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            padding: 20px;                 
+            box-sizing: border-box;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;         
+            text-align: center;
+            
+            border: 2px solid #e0e0e0;   
+            border-radius: 12px;         
+            padding: 40px;               
+            background-color: #ffffff;   
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            max-width: 600px;            
+            width: 90%;                  
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px; /* Smooth spacing between lens and input box */
+            margin-top: 20px;
+        }
+
+        .search-box input {
+            padding: 10px 14px;
+            width: 320px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+        }
+        
+        .search-box input:focus {
+            border-color: #ff7402; /* Highlights the box with your theme color when typing */
+        }
+
+        .being-colour {
+            color: #d46a19; 
+        }
+
+        .tag-line {
+            color: grey;
+        }
+#suggestion-item{
+    border:1px solid #ccc;
+    padding:10px;
+    border-radius:5px;
+}
+    
+        .lens {
+            font-size: 18px;
+            /* Optional: if you want a specific custom color on the lens, 
+               note that standard emojis color profiles vary by OS */
+        }
+          #suggestion-box {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            width: 40%;
+            border-radius: 9px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            
+        } 
+
+    </style>
+</head>
+<body>
+
+     <div class="top-navbar">
+         <span>&#9881;</span>
+         <span>&bull; online | &#128339; -ms</span>
+     </div>
+     
+     <div class="main-container">
+         <h1><span class="being-colour">Being </span>Infinity</h1>
+         <p class="tag-line">One million phrases. Four Algorithms. Prefix Based Auto Suggest</p>
+         
+         <form class="search-box">
+             <span class="lens">&#128269;</span> 
+             <input  id="searchinput" placeholder="Start typing to search!">
+         </form>
+         <div id="suggestion-box">
+         Suggestion Box
+   </div> 
+     </div>
+    <script>
+         var searchBox=document.getElementById("searchinput");
+         var suggestionBox = document.getElementById("suggestion-box");
+         searchBox.addEventListener("input", function(){
+            //1.get user typed text
+
+            var userInput=searchBox.value;
+            if(userInput.trim()==""){
+
+
+            }
+            else{
+                var url1= "https://autosuggest-backend.onrender.com/api/autosuggest?q=";
+                var url2= "&algorithm=brute&limit=10&weighted=false";
+                var url = url1 + userInput + url2;
+                fetch(url).
+                then(function(response){
+                    return response.json();
+                }).
+                then(function(data){
+                    console.log(data);
+                    var resultsArray=data.results;
+                    var htmlResults="";
+                    for(var i=0;i<resultsArray.length;i++){
+                        htmlResults+="<div id='suggestion-item'>"+resultsArray[i].text+"</div>";
+                    }
+                    // Display the results in the HTML
+
+                   // var suggestionBox = document.getElementById("suggestion-box");
+                    suggestionBox.innerHTML = htmlResults;
+
+                })
+                
+            }
+            
+               
+            
+            //2. make api call to get suggestion
+            //3. display data in html
+         })     
+    </script>
+</body>
+</html>
